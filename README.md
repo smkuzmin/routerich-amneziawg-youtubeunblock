@@ -215,7 +215,7 @@ uci set network.@route[-1].table='100'
 # Сохранить -> Применить (повторяем этот шаг для каждой подсети из telegram_nets)
 # Перед добавлением: Удаление всех старых маршрутов через интерфейс awg0 в таблице main
 uci show network | grep '@route.*awg0' | cut -d. -f2 | sort -Vr | while read r; do [ "$(uci -q get network.$r.table)" ] || uci -q delete network.$r; done
-telegram_nets='91.105.192.0/23 91.108.4.0/22 91.108.8.0/21 91.108.16.0/21 91.108.56.0/22 149.154.160.0/20 185.76.151.0/24'
+telegram_nets='91.105.192.0/23 91.108.4.0/22 91.108.8.0/21 91.108.12.0/22 91.108.16.0/21 91.108.56.0/22 149.154.160.0/20 185.76.151.0/24'
 for net in $telegram_nets; do
   uci add network route
   uci set network.@route[-1].interface='awg0'
