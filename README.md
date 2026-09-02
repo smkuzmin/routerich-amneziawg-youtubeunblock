@@ -67,7 +67,7 @@
 # Система -> Пакеты -> Действия: Обновить списки.. -> Закрыть
 # Загрузить и установить пакет: luci-app-youtubeUnblock -> OK -> Установить -> Закрыть
 for i in $(seq 1 10); do
-  opkg list-installed | grep -q luci-app-youtubeUnblock && break
+  opkg list-installed|grep -q luci-app-youtubeUnblock && break
   echo "[ Установка luci-app-youtubeUnblock: попытка $i из 10 ]"
   opkg update -V0 && opkg install luci-app-youtubeUnblock
 done
@@ -76,7 +76,7 @@ done
 # Сеть -> Межсетевой экран -> Зоны -> wan -> Изменить
 # Охватываемые сети: awg0: wan:
 # Сохранить -> Применить
-uci show firewall | grep "zone.*name='wan'" | cut -d. -f2 | sort -Vr | while read r; do
+uci show firewall|grep "zone.*name='wan'"|cut -d. -f2|sort -Vr|while read r; do
   uci -q del_list firewall.$r.network='awg0'
   uci -q add_list firewall.$r.network='awg0'
 done
@@ -129,7 +129,7 @@ uci set wireless.default_radio0.network='wifi24'
 #   - Охватываемые сети: wifi24
 # Сохранить -> Применить
 # Перед добавлением: Удаление зоны Firewall для интерфейса wifi24
-uci show firewall | grep "zone.*name='wifi24'" | cut -d. -f2 | sort -Vr | while read r; do uci -q delete firewall.$r; done
+uci show firewall|grep "zone.*name='wifi24'"|cut -d. -f2|sort -Vr|while read r; do uci -q delete firewall.$r; done
 uci set firewall.wifi24='zone'
 uci set firewall.wifi24.name='wifi24'
 uci set firewall.wifi24.input='ACCEPT'
@@ -146,7 +146,7 @@ uci set firewall.wifi24.network='wifi24'
 #   - Разрешить перенаправление из зон источников: wan
 # Сохранить -> Применить
 # Перед добавлением: Удаление правил пересылки для зоны wifi24
-uci show firewall | grep 'forwarding.*wifi24' | cut -d. -f2 | sort -Vr | while read r; do uci -q delete firewall.$r; done
+uci show firewall|grep 'forwarding.*wifi24'|cut -d. -f2|sort -Vr|while read r; do uci -q delete firewall.$r; done
 uci add firewall forwarding
 uci set firewall.@forwarding[-1].src='wifi24'
 uci set firewall.@forwarding[-1].dest='wan'
@@ -184,7 +184,7 @@ uci set dhcp.wifi24.leasetime='12h'
 #     - Таблица: 100
 # Сохранить -> Применить
 # Перед добавлением: Удаление всех старых маршрутов через интерфейс awg0
-uci show network | grep 'route.*awg0' | cut -d. -f2 | sort -Vr | while read r; do uci -q delete network.$r; done
+uci show network|grep 'route.*awg0'|cut -d. -f2|sort -Vr|while read r; do uci -q delete network.$r; done
 uci add network route
 uci set network.@route[-1].interface='awg0'
 uci set network.@route[-1].target='0.0.0.0/0'
@@ -200,7 +200,7 @@ uci set network.@route[-1].table='100'
 #     - Таблица: 100
 # Сохранить -> Применить
 # Перед добавлением: Удаление всех старых маршрутов через интерфейс wifi24
-uci show network | grep 'route.*wifi24' | cut -d. -f2 | sort -Vr | while read r; do uci -q delete network.$r; done
+uci show network|grep 'route.*wifi24'|cut -d. -f2|sort -Vr|while read r; do uci -q delete network.$r; done
 uci add network route
 uci set network.@route[-1].interface='wifi24'
 uci set network.@route[-1].target='192.168.2.0/24'
@@ -214,7 +214,7 @@ uci set network.@route[-1].table='100'
 #     - Приоритет: 91.105.192.0/23
 # Сохранить -> Применить (повторяем этот шаг для каждой подсети из telegram_nets)
 # Перед добавлением: Удаление всех старых маршрутов через интерфейс awg0 в таблице main
-uci show network | grep 'route.*awg0' | cut -d. -f2 | sort -Vr | while read r; do [ "$(uci -q get network.$r.table)" ] || uci -q delete network.$r; done
+uci show network|grep 'route.*awg0'|cut -d. -f2|sort -Vr|while read r; do [ "$(uci -q get network.$r.table)" ] || uci -q delete network.$r; done
 telegram_nets='91.105.192.0/23 91.108.4.0/22 91.108.8.0/21 91.108.12.0/22 91.108.16.0/21 91.108.56.0/22 149.154.160.0/20 185.76.151.0/24'
 for net in $telegram_nets; do
   uci add network route
@@ -231,7 +231,7 @@ done
 #     - Таблица: 100
 # Сохранить -> Применить
 # Перед добавлением: Удаление всех старых правил для сети 192.168.2.0/24
-uci show network | grep "rule.*src='192.168.2.0/24'" | cut -d. -f2 | sort -Vr | while read r; do uci -q delete network.$r; done
+uci show network|grep "rule.*src='192.168.2.0/24'"|cut -d. -f2|sort -Vr|while read r; do uci -q delete network.$r; done
 uci add network rule
 uci set network.@rule[-1].src='192.168.2.0/24'
 uci set network.@rule[-1].lookup='100'
