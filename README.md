@@ -282,7 +282,7 @@ reboot
 2. Скопируйте команды ниже и вставьте в окно терминала:
 ```bash
 (
-  check(){ r="31m[-]"; eval "$2" &>/dev/null && r="32m[+]"; printf "\033[1;%s\033[0m %s\n" "$r" "$1"; }
+  check(){ r='31m[-]'; eval "$2" &>/dev/null && r='32m[+]'; printf '\033[1;%s\033[0m %s\n' "$r" "$1"; }
   check "Шаг 1/1: IPv6 отключен"                                                            "uci show | grep \"wizard.default.ipv6='0'\""
   check "Шаг 1/2: IP-адрес роутера: 192.168.1.1"                                            "uci get network.lan.ipaddr | grep '192.168.1.1'"
   check "Шаг 1/2: Маска сети: 255.255.255.0"                                                "uci get network.lan.netmask | grep '255.255.255.0'"
